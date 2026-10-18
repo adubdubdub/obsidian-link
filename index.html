@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>In Obsidian öffnen</title>
+<style>
+  :root { color-scheme: light dark; --bg: #f6f5f8; --fg: #1d1b22; --muted: #6b6775; --accent: #7c5cdb; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #18161c; --fg: #ece9f2; --muted: #a29eab; --accent: #9b80ec; } }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--bg); color: var(--fg);
+         font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { padding: 24px 16px; text-align: center; max-width: 32rem; }
+  h1 { font-size: 1.1rem; font-weight: 600; margin: 0 0 1.5rem; overflow-wrap: anywhere; }
+  a.btn { display: inline-block; padding: 14px 28px; border-radius: 999px; background: var(--accent); color: #fff;
+          font-weight: 600; text-decoration: none; font-size: 1.1rem; }
+  p { color: var(--muted); font-size: .9rem; margin-top: 1.5rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1 id="title">Second Brain</h1>
+  <a class="btn" id="open" href="obsidian://open?vault=Second%20Brain">In Obsidian öffnen</a>
+  <p>Der Notizpfad steht nur im Teil hinter „#“ und wird an keinen Server geschickt.</p>
+</main>
+<script>
+  // Link-Format: https://o.lws20.de/#<Pfad im Vault ohne .md>, optional #v=<Vault>&f=<Pfad>
+  const VAULT = "Second Brain";
+  let raw = location.hash.slice(1), vault = VAULT, file = "";
+  try {
+    if (raw.startsWith("f=") || raw.startsWith("v=")) {
+      const p = new URLSearchParams(raw);
+      vault = p.get("v") || VAULT;
+      file = p.get("f") || "";
+    } else {
+      file = decodeURIComponent(raw);
+    }
+  } catch (e) { file = raw; }
+  let url = "obsidian://open?vault=" + encodeURIComponent(vault);
+  if (file) {
+    url += "&file=" + encodeURIComponent(file);
+    document.getElementById("title").textContent = file.split("/").pop();
+  }
+  document.getElementById("open").href = url;
+  if (file) location.href = url;
+</script>
+</body>
+</html>
