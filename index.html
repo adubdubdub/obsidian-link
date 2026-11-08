@@ -21,6 +21,7 @@
 <main>
   <h1 id="title">Second Brain</h1>
   <a class="btn" id="open" href="obsidian://open?vault=Second%20Brain">In Obsidian öffnen</a>
+  <p><a id="plain" href="obsidian://open?vault=Second%20Brain">Ohne Plugin öffnen</a></p>
   <p>Der Notizpfad steht nur im Teil hinter „#“ und wird an keinen Server geschickt.</p>
 </main>
 <script>
@@ -37,13 +38,15 @@
     }
   } catch (e) { file = raw; }
   // Advanced-URI-Plugin: öffnet die Notiz auch dann gezielt, wenn Obsidian schon im Hintergrund läuft
-  // (bei obsidian://open zeigte Android sonst nur die zuletzt geöffnete Notiz). Altes Muster: Commit 66dc677.
-  let url = "obsidian://open?vault=" + encodeURIComponent(vault);
+  // (bei obsidian://open zeigte Android sonst nur die zuletzt geöffnete Notiz). Rückfall: normaler open-Link.
+  let url = "obsidian://open?vault=" + encodeURIComponent(vault), plain = url;
   if (file) {
+    plain += "&file=" + encodeURIComponent(file);
     url = "obsidian://adv-uri?vault=" + encodeURIComponent(vault) + "&filepath=" + encodeURIComponent(file);
     document.getElementById("title").textContent = file.split("/").pop();
   }
   document.getElementById("open").href = url;
+  document.getElementById("plain").href = plain;
   if (file) location.href = url;
 </script>
 </body>
