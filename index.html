@@ -42,13 +42,7 @@
     document.getElementById("title").textContent = file.split("/").pop();
   }
   document.getElementById("open").href = url;
-  // Obsidian liest neu synchronisierte Dateien erst beim Nach-vorn-Holen ein. Erst nur die App wecken,
-  // kurz warten, dann auf die Notiz springen (sonst landet der erste Versuch auf der falschen Seite).
-  const WAKE_MS = 2500;
-  if (file) {
-    location.href = "obsidian://open?vault=" + encodeURIComponent(vault);
-    setTimeout(() => { location.href = url; }, WAKE_MS);
-  }
+  if (file) location.href = url;
 </script>
 </body>
 </html>
