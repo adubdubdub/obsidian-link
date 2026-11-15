@@ -1,4 +1,16 @@
+# obsidian-link
+
 Weiterleitung von https://o.lws20.de/#<Pfad> auf obsidian://open für den Vault „Second Brain“. Der Pfad steht im Fragment und erreicht keinen Server.
+
+## Auf einen Blick
+| | |
+|---|---|
+| **Zweck** | Link aus Telegram/Digest öffnet eine Notiz in Obsidian |
+| **Aufruf** | `https://o.lws20.de/#<Pfad>` |
+| **Ziel** | `obsidian://open` im Vault „Second Brain“ |
+
+> [!NOTE]
+> Der Pfad steht im Fragment (`#…`) und erreicht nie einen Server.
 
 ```mermaid
 sequenceDiagram
