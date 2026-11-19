@@ -42,11 +42,12 @@
   // Advanced-URI-Plugin: öffnet die Notiz auch dann gezielt, wenn Obsidian schon im Hintergrund läuft
   // (bei obsidian://open zeigte Android sonst nur die zuletzt geöffnete Notiz). Rückfall: normaler open-Link.
   // x=2: „&“ doppelt codiert (%2526), falls Obsidian/Android die URL vor dem Zerlegen schon einmal decodiert
-  const enc = s => variant === "2" ? encodeURIComponent(s).replace(/%26/g, "%2526") : encodeURIComponent(s);
+  // x=3: Schema advanced-uri (das Plugin decodiert dort jeden Wert ein zweites Mal), Werte doppelt codiert
+  const enc = s => variant === "3" ? encodeURIComponent(encodeURIComponent(s)) : variant === "2" ? encodeURIComponent(s).replace(/%26/g, "%2526") : encodeURIComponent(s);
   let url = "obsidian://open?vault=" + encodeURIComponent(vault), plain = url;
   if (file) {
     plain += "&file=" + enc(file + (heading ? "#" + heading : ""));
-    url = "obsidian://adv-uri?vault=" + encodeURIComponent(vault) + "&filepath=" + enc(file)
+    url = "obsidian://" + (variant === "3" ? "advanced-uri" : "adv-uri") + "?vault=" + encodeURIComponent(vault) + "&filepath=" + enc(file)
         + (heading ? "&heading=" + enc(heading) : "");
     document.getElementById("title").textContent = file.split("/").pop();
   }
