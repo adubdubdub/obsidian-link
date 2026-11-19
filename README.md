@@ -12,6 +12,9 @@ Weiterleitung von https://o.lws20.de/#<Pfad> auf obsidian://open für den Vault 
 > [!NOTE]
 > Abschnittslinks (`[[Notiz#Abschnitt]]`) tragen den Abschnitt als `h=`; er wird als `heading=` an Advanced URI bzw. als `#Abschnitt` an `open` weitergereicht (seit 19.11.2026).
 
+> [!WARNING]
+> Namen mit `&` (alle MOCs) öffnet die Seite über `obsidian://open` statt `adv-uri`: Android decodiert den Link vor dem Zerlegen, das `&` trennt dann den Pfad ab (Test 19.11.2026; doppelte Codierung und `advanced-uri` halfen nicht).
+
 > [!NOTE]
 > Der Pfad steht im Fragment (`#…`) und erreicht nie einen Server.
 

@@ -27,33 +27,33 @@
 <script>
   // Link-Format: https://o.lws20.de/#<Pfad im Vault ohne .md>, oder #f=<Pfad>&h=<Abschnitt>, optional v=<Vault>
   const VAULT = "Second Brain";
-  let raw = location.hash.slice(1), vault = VAULT, file = "", heading = "", variant = "";
+  let raw = location.hash.slice(1), vault = VAULT, file = "", heading = "";
   try {
     if (raw.startsWith("f=") || raw.startsWith("v=")) {
       const p = new URLSearchParams(raw);
       vault = p.get("v") || VAULT;
       file = p.get("f") || "";
       heading = p.get("h") || "";
-      variant = p.get("x") || "";   // Testvarianten fürs „&“ im Dateinamen (siehe README)
     } else {
       file = decodeURIComponent(raw);
     }
   } catch (e) { file = raw; }
   // Advanced-URI-Plugin: öffnet die Notiz auch dann gezielt, wenn Obsidian schon im Hintergrund läuft
   // (bei obsidian://open zeigte Android sonst nur die zuletzt geöffnete Notiz). Rückfall: normaler open-Link.
-  // x=2: „&“ doppelt codiert (%2526), falls Obsidian/Android die URL vor dem Zerlegen schon einmal decodiert
-  // x=3: Schema advanced-uri (das Plugin decodiert dort jeden Wert ein zweites Mal), Werte doppelt codiert
-  const enc = s => variant === "3" ? encodeURIComponent(encodeURIComponent(s)) : variant === "2" ? encodeURIComponent(s).replace(/%26/g, "%2526") : encodeURIComponent(s);
+  const enc = encodeURIComponent;
   let url = "obsidian://open?vault=" + encodeURIComponent(vault), plain = url;
   if (file) {
     plain += "&file=" + enc(file + (heading ? "#" + heading : ""));
-    url = "obsidian://" + (variant === "3" ? "advanced-uri" : "adv-uri") + "?vault=" + encodeURIComponent(vault) + "&filepath=" + enc(file)
+    url = "obsidian://adv-uri?vault=" + encodeURIComponent(vault) + "&filepath=" + enc(file)
         + (heading ? "&heading=" + enc(heading) : "");
     document.getElementById("title").textContent = file.split("/").pop();
   }
-  document.getElementById("open").href = url;
+  const go = file.includes("&") ? plain : url;   // „&“ im Namen: siehe unten
+  document.getElementById("open").href = go;
   document.getElementById("plain").href = plain;
-  if (file) location.href = url;
+  // Ein „&“ im Namen zerlegt den adv-uri-Link in Obsidian (Android decodiert vor dem Zerlegen, gefunden 19.11.2026):
+  // dafür den normalen open-Link nehmen, der den Namen richtig auflöst.
+  if (file) location.href = go;
 </script>
 </body>
 </html>
