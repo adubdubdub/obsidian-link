@@ -6,8 +6,11 @@ Weiterleitung von https://o.lws20.de/#<Pfad> auf obsidian://open für den Vault 
 | | |
 |---|---|
 | **Zweck** | Link aus Telegram/Digest öffnet eine Notiz in Obsidian |
-| **Aufruf** | `https://o.lws20.de/#<Pfad>` |
-| **Ziel** | `obsidian://open` im Vault „Second Brain“ |
+| **Aufruf** | `https://o.lws20.de/#<Pfad>` oder `https://o.lws20.de/#f=<Pfad>&h=<Abschnitt>` |
+| **Ziel** | `obsidian://adv-uri` (mit `filepath`, ggf. `heading`), Rückfall `obsidian://open` im Vault „Second Brain“ |
+
+> [!NOTE]
+> Abschnittslinks (`[[Notiz#Abschnitt]]`) tragen den Abschnitt als `h=`; er wird als `heading=` an Advanced URI bzw. als `#Abschnitt` an `open` weitergereicht (seit 19.11.2026).
 
 > [!NOTE]
 > Der Pfad steht im Fragment (`#…`) und erreicht nie einen Server.

@@ -25,14 +25,15 @@
   <p>Der Notizpfad steht nur im Teil hinter „#“ und wird an keinen Server geschickt.</p>
 </main>
 <script>
-  // Link-Format: https://o.lws20.de/#<Pfad im Vault ohne .md>, optional #v=<Vault>&f=<Pfad>
+  // Link-Format: https://o.lws20.de/#<Pfad im Vault ohne .md>, oder #f=<Pfad>&h=<Abschnitt>, optional v=<Vault>
   const VAULT = "Second Brain";
-  let raw = location.hash.slice(1), vault = VAULT, file = "";
+  let raw = location.hash.slice(1), vault = VAULT, file = "", heading = "";
   try {
     if (raw.startsWith("f=") || raw.startsWith("v=")) {
       const p = new URLSearchParams(raw);
       vault = p.get("v") || VAULT;
       file = p.get("f") || "";
+      heading = p.get("h") || "";
     } else {
       file = decodeURIComponent(raw);
     }
@@ -41,8 +42,9 @@
   // (bei obsidian://open zeigte Android sonst nur die zuletzt geöffnete Notiz). Rückfall: normaler open-Link.
   let url = "obsidian://open?vault=" + encodeURIComponent(vault), plain = url;
   if (file) {
-    plain += "&file=" + encodeURIComponent(file);
-    url = "obsidian://adv-uri?vault=" + encodeURIComponent(vault) + "&filepath=" + encodeURIComponent(file);
+    plain += "&file=" + encodeURIComponent(file + (heading ? "#" + heading : ""));
+    url = "obsidian://adv-uri?vault=" + encodeURIComponent(vault) + "&filepath=" + encodeURIComponent(file)
+        + (heading ? "&heading=" + encodeURIComponent(heading) : "");
     document.getElementById("title").textContent = file.split("/").pop();
   }
   document.getElementById("open").href = url;
