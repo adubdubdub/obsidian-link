@@ -22,6 +22,7 @@
   <h1 id="title">Second Brain</h1>
   <a class="btn" id="open" href="obsidian://open?vault=Second%20Brain">In Obsidian öffnen</a>
   <p><a id="plain" href="obsidian://open?vault=Second%20Brain">Ohne Plugin öffnen</a></p>
+  <p id="hint" hidden>Zum Öffnen bitte auf den Knopf tippen.</p>
   <p>Der Notizpfad steht nur im Teil hinter „#“ und wird an keinen Server geschickt.</p>
 </main>
 <script>
@@ -51,17 +52,18 @@
         + (heading ? "&heading=" + enc(heading) : "");
     document.getElementById("title").textContent = file.split("/").pop();
   }
+  if (file.includes("&")) document.getElementById("hint").hidden = false;
   const go = file.includes("&") ? plain : url;   // „&“ im Namen: siehe unten
   document.getElementById("open").href = go;
   document.getElementById("plain").href = plain;
-  // Ein „&“ im Namen zerlegt den adv-uri-Link in Obsidian (Android decodiert vor dem Zerlegen, gefunden 19.11.2026):
-  // dafür den normalen open-Link nehmen, der den Namen richtig auflöst.
+  // Namen mit „&“: Der automatische Sprung scheitert auf Android (adv-uri wie open, getestet 19.11.2026), der
+  // Fingertipp auf den open-Link funktioniert. Daher hier kein Auto-Sprung, der große Knopf öffnet per Tipp.
   if (debug) {
     const pre = document.createElement("pre");
     pre.style.cssText = "text-align:left;white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px";
     pre.textContent = "hash: " + rawHash + "\nfile: " + file + "\nheading: " + heading + "\ngo: " + go;
     document.querySelector("main").appendChild(pre);
-  } else if (file) location.href = go;
+  } else if (file && !file.includes("&")) location.href = go;
 </script>
 </body>
 </html>
