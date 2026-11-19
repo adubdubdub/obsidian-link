@@ -27,7 +27,10 @@
 <script>
   // Link-Format: https://o.lws20.de/#<Pfad im Vault ohne .md>, oder #f=<Pfad>&h=<Abschnitt>, optional v=<Vault>
   const VAULT = "Second Brain";
-  let raw = location.hash.slice(1), vault = VAULT, file = "", heading = "";
+  let raw = location.hash.slice(1), debug = false, vault = VAULT, file = "", heading = "";
+  if (raw.endsWith("~d")) { debug = true; raw = raw.slice(0, -2); }
+  if (raw.endsWith("&x=d")) { debug = true; raw = raw.slice(0, -4); }
+  const rawHash = location.hash;
   try {
     if (raw.startsWith("f=") || raw.startsWith("v=")) {
       const p = new URLSearchParams(raw);
@@ -53,7 +56,12 @@
   document.getElementById("plain").href = plain;
   // Ein „&“ im Namen zerlegt den adv-uri-Link in Obsidian (Android decodiert vor dem Zerlegen, gefunden 19.11.2026):
   // dafür den normalen open-Link nehmen, der den Namen richtig auflöst.
-  if (file) location.href = go;
+  if (debug) {
+    const pre = document.createElement("pre");
+    pre.style.cssText = "text-align:left;white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px";
+    pre.textContent = "hash: " + rawHash + "\nfile: " + file + "\nheading: " + heading + "\ngo: " + go;
+    document.querySelector("main").appendChild(pre);
+  } else if (file) location.href = go;
 </script>
 </body>
 </html>
